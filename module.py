@@ -3,7 +3,6 @@ from flask import ( send_file, after_this_request, session)
 import tempfile
 import os
 
-from main import Word
 
 
 
@@ -18,7 +17,7 @@ def send_word_file(doc):
         try:
             os.remove(tmp_file_path)
         except Exception as e:
-            print(f"Error removing temporary file: {e}")
+            print(f"エラー: {e}")
         return response
 
     return response
@@ -27,6 +26,7 @@ def send_word_file(doc):
 
 
 def initialize_sessions():
+    from main import Word
     session.setdefault("words", [])
     session.setdefault("new_words", [])
     session.setdefault("change_words", [])

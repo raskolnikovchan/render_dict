@@ -5,25 +5,22 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import docx
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from google.cloud import vision
+from dotenv import load_dotenv
 import os
 import re
+
 
 from __init__ import app, db
 from module import send_word_file, initialize_sessions
 
 
-
+load_dotenv(os.path.join(os.path.dirname(__file__), 'ignore', '.env'))
 
 
 class Word(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
     meaning = db.Column(db.Text, nullable=False)
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(150), nullable=False)
 
 
 #トップページ
@@ -32,38 +29,18 @@ def home():
     initialize_sessions()
     return render_template("home.html")
 
-#サインアップページ
-@app.route("/signup", methods=["GET","POST"])
-def signup():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-
-        user = User.query.filter_by(username=username).first()
-        if user:
-            flash("ユーザー名は既に使用されています。別のユーザー名を選択してください。")
-            return redirect(url_for("signup"))
-    
-        hashed_password = generate_password_hash(password, method="pbkdf2:sha256")
-        new_user = User(username=username, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
-
-        flash("サインアップが成功しました。ログインしてください。")
-        return redirect(url_for("login"))
-    
-    return render_template("signup.html")
 
 #ログインページ
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
+        correct_username = os.getenv('LOGIN_USERNAME')
+        correct_password = os.getenv('LOGIN_PASSWORD')
         username = request.form["username"]
         password = request.form["password"]
 
-        user = User.query.filter(User.username == username).first()
-        if user and check_password_hash(user.password, password):
-            session["user_id"] = user.id
+        if username == correct_username and password == correct_password:
+            session["user_id"] = 1
             flash("ログインに成功しました")
             return redirect(url_for("create_dict"))
         else:
