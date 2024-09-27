@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">用語集作成</h1>
+
+    <!-- 用語入力フォーム -->
+    <form action="/add_word" method="POST" class="shadow p-4 bg-light rounded">
+        <div class="mb-3 form-group">
+            <label for="word_names" class="form-label">改行区切りで用語を入力してください。先頭に!マークをつけると見出しになります。:</label>
+            <textarea class="form-control" rows="8" id="word_names" name="word_names" placeholder="例: 用語1&#10;用語2&#10;！見出し&#10;用語3">{% if words %}{{ words|join('\n') }}{% endif %}</textarea>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary px-5">追加</button>
+        </div>
+    </form>
+    
+    <hr class="my-5">
+    
+    <!-- 現在の用語リスト -->
+    <h2 class="text-center mb-4">現在の用語リスト</h2>
+    <ul class="list-group list-group-flush mb-5">
+        {% for word in words %}
+        <li class="list-group-item py-2">{{ word }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h3 class="text-center mb-4"><a href="/detect_text">画像から文章を抽出する</a></h2>
+
+    {% if texts %}
+    <hr class="my-5">
+
+       <!-- 現在の用語リスト -->
+       <h2 class="text-center mb-4">画像テキスト</h2>
+        <p>{{ texts|replace("\n", "<br>"|safe) }}</p>
+
+    {% endif %}
+       
+    <hr class="my-5">
+    
+    <!-- セッション初期化 -->
+    <h2 class="text-center mb-4">セッションの初期化</h2>
+    <form action="" method="post" class="text-center">
+        <div class="form-check mb-2">
+            <input type="checkbox" class="form-check-input" name="sessions" value="words" id="words">
+            <label for="words" class="form-check-label">現在のワードリスト</label>
+        </div>
+        <div class="form-check mb-2">
+            <input type="checkbox" class="form-check-input" name="sessions" value="change_words" id="change_words">
+            <label for="change_words" class="form-check-label">意味変更リスト</label>
+        </div>
+        <div class="form-check mb-2">
+            <input type="checkbox" class="form-check-input" name="sessions" value="image_texts" id="image_texts">
+            <label for="image_texts" class="form-check-label">画像のテキスト</label>
+        </div>
+        <div class="form-check mb-2">
+            <input type="checkbox" class="form-check-input" name="sessions" value="existing_words" id="existing_words">
+            <label for="existing_words" class="form-check-label">データベースの単語リスト</label>
+        </div>
+        <button type="submit" class="btn btn-danger px-4">セッションを初期化する</button>
+    </form>
+
+    <hr class="my-5">
+    
+    <!-- Word出力フォーム -->
+    <h2 class="text-center mb-4">Wordファイルに出力</h2>
+    <form action="/export_word" method="POST" class="shadow p-4 bg-light rounded">
+        <div class="mb-3 form-group">
+            <label for="title" class="form-label">Wordタイトル:</label>
+            <input type="text" id="title" name="word_title" class="form-control" placeholder="例: 用語集タイトル">
+        </div>
+        <div class="form-group">
+            <label>処理方法を選んでください</label>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="export_treat" id="make_dict" value="make_dict"checked>
+                <label class="form-check-label" for="make_dict">用語集を作成する</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="export_treat" id="all_data" value="all_data" >
+                <label class="form-check-label" for="all_data">全てのデータを出力する</label>
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-success px-5">Wordに出力する</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

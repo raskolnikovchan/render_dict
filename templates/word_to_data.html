@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">WordからDBに単語を登録する</h1>
+    
+    <form action="" method="post" enctype="multipart/form-data" class="p-4 shadow-sm rounded bg-white">
+        <div class="form-group">
+            <label for="file">Wordファイルをアップロードしてください</label>
+            <input type="file" class="form-control-file" name="file" accept=".docx" id="file">
+        </div>
+
+        <div class="form-group">
+            <label>処理方法を選んでください</label>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="word_treat" id="word_to_data" value="word_to_data">
+                <label class="form-check-label" for="word_to_data">データベースに保存</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="word_treat" id="word_to_word" value="word_to_word" checked>
+                <label class="form-check-label" for="word_to_word">Wordの再整形</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">送信</button>
+    </form>
+</div>
+{% endblock %}

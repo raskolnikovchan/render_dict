@@ -1,0 +1,59 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+h1, h2 {
+    color: #333;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+}
+
+form {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.btn {
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+ul.list-group {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.list-group-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+hr {
+    border-top: 1px solid #bbb;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    textarea, input[type="text"] {
+        width: 100%;
+    }
+}

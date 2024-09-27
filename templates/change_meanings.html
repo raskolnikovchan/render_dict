@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<form action="/change_words" method="POST" class="shadow p-4 bg-light rounded">
+    <div class="mb-3 form-group">
+        <label for="change_names" class="form-label">変更する用語を入力してください (改行で区切る):</label>
+        <textarea class="form-control" rows="8" id="change_names" name="change_names" placeholder="例: 用語1&#10;用語2"></textarea>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary px-5">編集</button>
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">テキスト抽出 </h1>
+    
+    <form action="" method="post" enctype="multipart/form-data" class="p-4 shadow-sm rounded bg-white">
+        <div class="form-group">
+            <label for="file">画像ファイルをアップロードしてください。</label>
+            <input type="file" class="form-control-file" name="file" accept=".png" id="file">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">送信</button>
+    </form>
+</div>
+{% endblock %}

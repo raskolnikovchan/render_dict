@@ -1,0 +1,30 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+  <h1>用語集作成アプリ</h1>
+
+  {% if session.get("user_id") %}
+    <div class="row justify-content-center">
+      <div class="col-md-auto mb-3">
+        <a href="/create_dict" class="btn btn-primary">用語集作成</a>
+      </div>
+      <div class="col-md-auto">
+        <a href="/word_to_data" class="btn btn-secondary">WordからDBに登録</a>
+      </div>
+    </div>
+  {% else %}
+    <div class="row justify-content-center">
+      <div class="col-md-auto mb-3">
+        <a href="/signup" class="btn btn-primary">サインアップ</a>
+      </div>
+      <div class="col-md-auto">
+        <a href="/login" class="btn btn-outline-primary">ログイン</a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}
