@@ -417,7 +417,7 @@ def detect_text():
     if request.method == "POST":
         file = request.files["file"]
         """Detects text in the file."""
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), '.gitignore', 'vison-app-434901-2321b498d0f2.json')
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), 'ignore', 'vison-app-434901-2321b498d0f2.json')
 
         client = vision.ImageAnnotatorClient()
 
