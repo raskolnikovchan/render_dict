@@ -5,7 +5,7 @@ from flask_session import Session
 from dotenv import load_dotenv
 import os
 
-load_dotenv(os.path.join(os.path.dirname(__file__), '.gitignore', '.env'))
+load_dotenv(os.path.join(os.path.dirname(__file__), 'ignore', '.env'))
 
 app = Flask(__name__)
 
