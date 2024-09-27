@@ -1,4 +1,5 @@
 #ユーザー登録に差し替える用
+# from werkzeug.security import generate_password_hash, check_password_hash
 
 # #サインアップページ
 # @app.route("/signup", methods=["GET","POST"])

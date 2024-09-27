@@ -1,8 +1,7 @@
-import docx.shared
 from flask import (render_template, request, 
                    redirect, url_for, flash, session)
-from werkzeug.security import generate_password_hash, check_password_hash
 import docx
+import docx.shared
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from google.cloud import vision
 from dotenv import load_dotenv
