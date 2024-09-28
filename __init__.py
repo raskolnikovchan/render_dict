@@ -15,11 +15,9 @@ db_name = os.getenv("DB_NAME")
 
 # PostgreSQL接続の設定
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    f"postgresql://{db_user}:{db_password}"
-    f"@{db_host}/{db_name}"
+    f"postgresql://{db_user}:{db_password}@{db_host}/{db_name}?sslmode=require"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
