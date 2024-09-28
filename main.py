@@ -14,7 +14,6 @@ from __init__ import app, db
 from module import send_word_file, initialize_sessions
 
 
-load_dotenv(os.path.join(os.path.dirname(__file__), 'ignore', '.env'))
 
 
 class Word(db.Model):
@@ -87,7 +86,8 @@ def create_dict():
 #DBに無い単語をリストにしてinput_meaningsに遷移する。
 @app.route("/add_word", methods=["POST"])
 def add_word():
-
+    if "new_words" not in session:
+        session["new_words"] = []
 
     word_names = request.form.get("word_names")
     word_list = [word.strip() for word in word_names.split("\n") if word.strip()]
