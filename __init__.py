@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 
 db_user = os.getenv("DB_USER")
-db_password = os.getenv("PASSWORD")
+db_password = os.getenv("DB_PASSWORD")
 db_host = os.getenv("DB_HOST")
 db_name = os.getenv("DB_NAME")
 
