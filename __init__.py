@@ -2,17 +2,21 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_session import Session
-from dotenv import load_dotenv
 import os
 
-load_dotenv(os.path.join(os.path.dirname(__file__), 'ignore', '.env'))
 
 app = Flask(__name__)
 
+
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_USER")
+db_host = os.getenv("DB_USER")
+db_name = os.getenv("DB_USER")
+
 # PostgreSQL接続の設定
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-    f"@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
+    f"postgresql://{db_user}:{db_password}"
+    f"@{db_host}/{db_name}"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 

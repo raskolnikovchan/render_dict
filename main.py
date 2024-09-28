@@ -7,6 +7,7 @@ from google.cloud import vision
 from dotenv import load_dotenv
 import os
 import re
+import tempfile
 
 
 from __init__ import app, db
@@ -392,20 +393,20 @@ def input_change_meanings():
 def detect_text():
     if request.method == "POST":
         file = request.files["file"]
-        """Detects text in the file."""
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), 'ignore', 'vison-app-434901-2321b498d0f2.json')
+        credentials_json = os.getenv("GOOGLE_CREDENTIALS_JSON")
+
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".json") as tmp_file:
+            tmp_file.write(credentials_json.encode())
+            tmpfile_path = tmp_file.name
+
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmpfile_path
 
         client = vision.ImageAnnotatorClient()
-
         content = file.read()
-
         image = vision.Image(content=content)
 
         response = client.text_detection(image=image)
         texts = response.text_annotations
-        if "image_texts" not in session:
-            session["image_texts"] = []
-        session["image_texts"] = []
         if  texts:
             session["image_texts"] = texts[0].description
         
