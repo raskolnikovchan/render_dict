@@ -212,7 +212,7 @@ def export_word():
             doc.add_paragraph()
 
     # 一時ファイルを作成
-    send_word_file(doc)
+    return send_word_file(doc)
 
 
 
@@ -303,7 +303,7 @@ def word_to_data():
                         paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
                         doc.add_paragraph()
-                send_word_file(doc)
+                return send_word_file(doc)
 
 
     elif request.method == "GET":
