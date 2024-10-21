@@ -32,4 +32,4 @@ def initialize_sessions():
     session.setdefault("change_words", [])
     session.setdefault("image_texts", [])
     session.setdefault("heading", [])
-    # session.setdefault("existing_words", [word.name for word in Word.query.all()])
+    session.setdefault("existing_words", [word.name for word in Word.query.all()])

@@ -65,14 +65,7 @@ def create_dict():
             elif selected_session == "image_texts":
                 session["image_texts"] = []
             elif selected_session == "existing_words":
-                existing_words = []
-                for word in Word.query.all():
-                    try:
-                        existing_words.append(word.name)
-                    except UnicodeDecodeError:
-                        print(f"Error decoding word: {word.name}")
-                session["existing_words"] = existing_words
-                # session["existing_words"] = [word.name for word in Word.query.filter().all()]
+                session["existing_words"] = [word.name for word in Word.query.filter().all()]
     
     words = session["words"]
     return render_template(
@@ -185,8 +178,8 @@ def export_word():
                 run_word.font.bold = True
                 run_word.font.size = docx.shared.Pt(26)
                 paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-
-        doc.add_paragraph()
+            
+            doc.add_paragraph()
     #全てのデータを出力する。
     else:
         all_data = [word for word in Word.query.filter().all()]
