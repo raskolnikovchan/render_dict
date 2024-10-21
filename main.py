@@ -4,7 +4,6 @@ import docx
 import docx.shared
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from google.cloud import vision
-from dotenv import load_dotenv
 import os
 import re
 import tempfile
@@ -12,14 +11,8 @@ import tempfile
 
 from __init__ import app, db
 from module import send_word_file, initialize_sessions
+from models.word import Word
 
-
-
-
-class Word(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False, unique=True)
-    meaning = db.Column(db.Text, nullable=False)
 
 
 #トップページ
@@ -72,7 +65,14 @@ def create_dict():
             elif selected_session == "image_texts":
                 session["image_texts"] = []
             elif selected_session == "existing_words":
-                session["existing_words"] = [word.name for word in Word.query.filter().all()]
+                existing_words = []
+                for word in Word.query.all():
+                    try:
+                        existing_words.append(word.name)
+                    except UnicodeDecodeError:
+                        print(f"Error decoding word: {word.name}")
+                session["existing_words"] = existing_words
+                # session["existing_words"] = [word.name for word in Word.query.filter().all()]
     
     words = session["words"]
     return render_template(
