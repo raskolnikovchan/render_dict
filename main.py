@@ -59,7 +59,7 @@ def create_dict():
         
         for selected_session in selected_sessions: 
             if selected_session == "words":
-                session["words"] = session["new_words"] = session["heading"] = []
+                session["words"] = session["new_words"] = session["heading"] = session["tmp_words"] = []
             elif selected_session == "change_words":
                 session["change_words"]  = []
             elif selected_session == "image_texts":
@@ -67,7 +67,7 @@ def create_dict():
             elif selected_session == "existing_words":
                 session["existing_words"] = [word.name for word in Word.query.filter().all()]
     
-    words = session["words"]
+    words = session["tmp_words"]
     return render_template(
         "create_dict.html",
         words=words,
@@ -84,13 +84,19 @@ def add_word():
 
     word_names = request.form.get("word_names")
     word_list = [word.strip() for word in word_names.split("\n") if word.strip()]
-    session["words"] = word_list
-    for word in word_list:
+    session["tmp_words"] = word_list
+    for word in session["tmp_words"]:
 
+        #見出しリストへ
         if word.startswith("!") or word.startswith("！"):
-               session["heading"].append(word) 
+               session["heading"].append(word)
+               continue
+        
+        #ワードリストへ
+        if word not in session["words"]:
+            session["words"].append(word)
 
-        elif (word not in session["existing_words"]) and (word not in session["new_words"]):
+        if (word not in session["existing_words"]) and (word not in session["new_words"]):
             session["new_words"].append(word)
     
     session.modified = True
@@ -108,6 +114,8 @@ def input_meanings():
     if "user_id" not in session:
         flash("ログインが必要です。")
         return redirect(url_for("login"))
+    
+
     if request.method == "POST":
         meanings = {}
         new_words = []
@@ -136,21 +144,18 @@ def export_word():
     export_treat = request.form.get('export_treat')
 
     if export_treat == "make_dict":
-        words = session["words"]
-
-        words_for_query = [word for word in words if word not in session["heading"]]
+        words_for_query = session.get("words", [])
+        heading = session.get("heading", [])
+        
         words_from_db = Word.query.filter(Word.name.in_(words_for_query)).all()
 
         final_export_list = []
 
-        for word in words:
-            if word in session["heading"]:
-                final_export_list.append(word[1:])
+        for header in heading:
+                final_export_list.append(header[1:])           
 
-            else:
-                db_word = next((w for w in words_from_db if w.name == word), None)
-                if db_word:
-                    final_export_list.append(db_word)
+        for word in words_from_db:
+                    final_export_list.append(word)
 
 
         doc = docx.Document()

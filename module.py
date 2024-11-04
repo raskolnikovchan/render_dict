@@ -27,6 +27,7 @@ def send_word_file(doc):
 
 def initialize_sessions():
     from main import Word
+    session.setdefault("tmp_words", [])
     session.setdefault("words", [])
     session.setdefault("new_words", [])
     session.setdefault("change_words", [])
