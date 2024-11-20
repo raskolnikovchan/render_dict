@@ -59,13 +59,11 @@ def create_dict():
         
         for selected_session in selected_sessions: 
             if selected_session == "words":
-                session["words"] = session["new_words"] = session["heading"] = session["tmp_words"] = []
+                session["words"] = session["new_words"]  = session["tmp_words"] = []
             elif selected_session == "change_words":
                 session["change_words"]  = []
             elif selected_session == "image_texts":
                 session["image_texts"] = []
-            elif selected_session == "existing_words":
-                session["existing_words"] = [word.name for word in Word.query.filter().all()]
     
     words = session["tmp_words"]
     return render_template(
@@ -85,19 +83,21 @@ def add_word():
     word_names = request.form.get("word_names")
     word_list = [word.strip() for word in word_names.split("\n") if word.strip()]
     session["tmp_words"] = word_list
+    existing_words = [word.name for word in Word.query.filter().all()]
+    session["words"] = []
     for word in session["tmp_words"]:
 
-        #見出しリストへ
+        #見出しはスルー
         if word.startswith("!") or word.startswith("！"):
-               session["heading"].append(word)
-               continue
+            continue
         
         #ワードリストへ
-        if word not in session["words"]:
+        elif  word not in session["words"]:
             session["words"].append(word)
 
-        if (word not in session["existing_words"]) and (word not in session["new_words"]):
-            session["new_words"].append(word)
+            if word not in existing_words:
+                if word not in session["new_words"]:
+                    session["new_words"].append(word)
     
     session.modified = True
         
@@ -122,12 +122,10 @@ def input_meanings():
         for word in session["new_words"]:
             meaning = request.form.get(f"meaning_{word}")  
             meanings[word] = meaning 
-            print(meanings.items())
         for word, meaning in meanings.items():
             if meaning and meaning.strip():
                 new_word = Word(name=word, meaning=meaning)
                 new_words.append(new_word)
-                session["existing_words"].append(word)
         
         session.modified  = True
         db.session.add_all(new_words)
@@ -145,17 +143,18 @@ def export_word():
 
     if export_treat == "make_dict":
         words_for_query = session.get("words", [])
-        heading = session.get("heading", [])
         
         words_from_db = Word.query.filter(Word.name.in_(words_for_query)).all()
-
         final_export_list = []
 
-        for header in heading:
-                final_export_list.append(header[1:])           
 
-        for word in words_from_db:
-                    final_export_list.append(word)
+        for word in session["tmp_words"]:
+            if word.startswith("!") or word.startswith("！"):
+                final_export_list.append(word[1:])
+            
+            else:
+                match_word = next((w for w in words_from_db if w.name == word))
+                final_export_list.append(match_word)
 
 
         doc = docx.Document()
