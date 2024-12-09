@@ -28,8 +28,8 @@ Session(app)
 db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
-
-app.secret_key = 'db_test_key'
+secret_key = os.getenv("SECRET_KEY")
+app.secret_key = secret_key
 
 import main  
 
